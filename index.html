@@ -1,6 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* ================================================
+   PREMIUM LONG BAR LOGO + TAGLINE
+   ================================================ */
+
+/* Main navbar/header styling */
+nav, header, .navbar {
+  background: var(--black);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Logo container - becomes a horizontal bar */
+.logo-container, .navbar-brand, .logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #E8401C 0%, #D4A843 100%);
+  border-radius: 0 0 12px 0; /* Bottom-right curve only */
+  position: relative;
+  overflow: hidden;
+  min-width: 280px;
+  transition: all 0.4s ease;
+}
+
+/* Animated shimmer on the bar */
+.logo-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { left: -100%; }
+  50% { left: 100%; }
+}
+
+/* The logo image itself */
+.logo-container img, .navbar-brand img {
+  height: 42px;
+  width: auto;
+  filter: brightness(0) invert(1); /* Makes logo white */
+  z-index: 2;
+  position: relative;
+}
+
+/* Brand text wrapper */
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 2;
+  position: relative;
+}
+
+/* "THE NEEDS" - main brand name */
+.logo-text .brand-name {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #fff;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* "Your Car Our Care" - tagline */
+.logo-text .brand-tagline {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.85);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* Hover effect - bar extends slightly */
+.logo-container:hover {
+  min-width: 300px;
+  box-shadow: 0 8px 24px rgba(232, 64, 28, 0.3);
+}
+
+/* Mobile - make bar stack vertically */
+@media (max-width: 768px) {
+  .logo-container {
+    min-width: auto;
+    width: 100%;
+    border-radius: 0;
+    justify-content: center;
+  }
+  
+  .logo-text .brand-name {
+    font-size: 18px;
+  }
+  
+  .logo-text .brand-tagline {
+    font-size: 9px;
+  }
+}
+</style>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>The Needs – Premium Auto Repair & Complete Car Care | Bhubaneswar</title>
@@ -74,6 +186,11 @@ img{max-width:100%;height:auto;display:block}
 a{text-decoration:none;color:inherit}
 button{cursor:pointer;font-family:var(--font-body)}
 input,textarea,select{font-family:var(--font-body)}
+  
+/* Smooth logo transition */
+.logo, .navbar-logo, .nav-logo, header img {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
 
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar{width:5px}
@@ -180,6 +297,16 @@ body::before{
 .nav-logo-sub{
   font-family:var(--font-sub);font-size:9px;letter-spacing:3px;
   color:var(--text2);text-transform:uppercase;line-height:1;
+}
+.logo-container {
+  background: #141414;
+  border: 2px solid #D4A843;
+  border-radius: 8px;
+}
+
+.logo-text .brand-name,
+.logo-text .brand-tagline {
+  color: #D4A843;
 }
 .nav-links{
   display:flex;align-items:center;gap:28px;list-style:none;
@@ -876,7 +1003,7 @@ footer{
 .delay-3{animation-delay:.3s;opacity:0}
 .delay-4{animation-delay:.4s;opacity:0}
 
-.live-dot{width:8px;height:8px;background:#25D366;border-radius:50%;display:inline-block;animation:pulse 1.5s ease infinite;flex-shrink:0}
+.live-dot{width:8px;height:8px;background:#25D366;border-radius:50%;display:inline-block;animation:pulse 15s ease infinite;flex-shrink:0}
 </style>
 </head>
 <body>
@@ -885,6 +1012,13 @@ footer{
 <nav id="navbar">
   <div class="nav-inner">
     <a class="nav-logo" href="#" onclick="showPage('home')">
+      <div class="logo-container">
+  <img src="https://i.ibb.co/ks05MLvY/logo.png" alt="The Needs Logo">
+  <div class="logo-text">
+    <span class="brand-name">THE NEEDS</span>
+    <span class="brand-tagline">Your Car Our Care</span>
+  </div>
+      </div>
       <img src="https://i.ibb.co/ks05MLvY/logo.png" alt="The Needs Logo" class="nav-logo-img"></div>
       <div>
         <div class="nav-logo-text">THE NEEDS</div>
@@ -2575,5 +2709,197 @@ document.addEventListener('keydown', (e) => {
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
  </script>
+<script>
+  // Logo hide on scroll down, show on scroll up
+  let lastScroll = 0;
+
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.scrollY;
+
+    // Find your logo — adjust the selector if needed
+    const logo = document.querySelector('.logo, .navbar-logo, img[alt*="Logo"], img[alt*="logo"], .nav-logo, header img');
+
+    if (!logo) return;
+
+    if (currentScroll > lastScroll && currentScroll > 80) {
+      // Scrolling DOWN — hide logo
+      logo.style.opacity = '0';
+      logo.style.transform = 'translateX(-20px)';
+      logo.style.pointerEvents = 'none';
+    } else {
+      // Scrolling UP — show logo
+      logo.style.opacity = '1';
+      logo.style.transform = 'translateX(0)';
+      logo.style.pointerEvents = 'auto';
+    }
+
+    lastScroll = currentScroll;
+  });
+</script>
+  <!-- AUTO-SCROLLING REVIEWS STRIP -->
+<style>
+.reviews-track-wrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 20px 0;
+  /* Fade edges */
+  -webkit-mask: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  mask: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+}
+
+.reviews-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: scrollLeft 35s linear infinite;
+}
+
+/* PAUSE on hover anywhere in the strip */
+.reviews-track-wrapper:hover .reviews-track {
+  animation-play-state: paused;
+  cursor: grab;
+}
+
+@keyframes scrollLeft {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Individual Review Card */
+.review-card-scroll {
+  background: #1A1A1A;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  padding: 28px 28px 24px;
+  min-width: 300px;
+  max-width: 300px;
+  flex-shrink: 0;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.reviews-track-wrapper:hover .review-card-scroll:hover {
+  border-color: rgba(232, 64, 28, 0.35);
+  transform: translateY(-4px);
+}
+
+.review-card-scroll .stars {
+  color: #F5A623;
+  font-size: 16px;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+}
+
+.review-card-scroll .review-text {
+  font-size: 14.5px;
+  color: #BBBBBB;
+  line-height: 1.75;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.review-card-scroll .reviewer-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.review-card-scroll .reviewer-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #E8401C, #D4A843);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.review-card-scroll .reviewer-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #F5F5F5;
+}
+
+.review-card-scroll .reviewer-date {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+.review-card-scroll .google-badge {
+  margin-left: auto;
+  font-size: 11px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+</style>
+
+<script>
+// Build the scrolling reviews strip
+// ✏️ ADD YOUR REAL REVIEWS in the array below
+const reviewsData = [
+  { name: "Rahul Mohanty",    date: "2 weeks ago",  stars: 5, text: "Excellent service! Got my car's AC fixed in just 2 hours. Very professional team and transparent pricing. Highly recommended." },
+  { name: "Priya Das",        date: "1 month ago",  stars: 5, text: "Best auto care center in Bhubaneswar. Satyaprakash sir personally checked my car and explained everything. No hidden charges at all." },
+  { name: "Amit Kumar",       date: "3 weeks ago",  stars: 4, text: "Good experience overall. Wheel alignment was done perfectly. Will definitely come back for my next service." },
+  { name: "Suresh Pattnaik",  date: "1 month ago",  stars: 5, text: "My car was making a weird noise for weeks. The team diagnosed it within minutes. Very skilled technicians!" },
+  { name: "Deepika Rath",     date: "2 months ago", stars: 5, text: "Brought my Swift for full detailing — it looks brand new! The painting job is flawless. Worth every rupee." },
+  { name: "Bikash Nayak",     date: "3 months ago", stars: 4, text: "Quick turnaround time. Dropped the car in the morning, picked it up by evening fully serviced. Great work!" },
+  { name: "Sanjay Sahu",      date: "2 weeks ago",  stars: 5, text: "Transparent pricing is what I love most. No surprise bills. They show you exactly what needs to be done before starting." },
+  { name: "Anita Mishra",     date: "1 month ago",  stars: 5, text: "The team is very courteous and honest. They could have charged me more but they told me only what was actually needed." },
+  { name: "Rajesh Behera",    date: "5 weeks ago",  stars: 5, text: "One stop solution for everything! Engine check, oil change, tyre rotation — all done in one visit. Love this place." },
+];
+
+function buildReviewsStrip() {
+  // Find the container where your reviews section is
+  // ✏️ Change '#reviews-section' to your actual reviews section ID or class
+  const target = document.querySelector('#reviews-section, [data-section="reviews"], .reviews-section, section:has(h2)');
+
+  if (!target) {
+    console.warn('Reviews section not found. Change the selector in buildReviewsStrip()');
+    return;
+  }
+
+  // Build cards HTML (doubled for seamless loop)
+  const cardsHTML = [...reviewsData, ...reviewsData].map(r => {
+    const initial = r.name.charAt(0).toUpperCase();
+    const starsHTML = '★'.repeat(r.stars) + '☆'.repeat(5 - r.stars);
+    return `
+      <div class="review-card-scroll">
+        <div class="stars">${starsHTML}</div>
+        <p class="review-text">"${r.text}"</p>
+        <div class="reviewer-info">
+          <div class="reviewer-avatar">${initial}</div>
+          <div>
+            <div class="reviewer-name">${r.name}</div>
+            <div class="reviewer-date">${r.date}</div>
+          </div>
+          <div class="google-badge">🌐 Google</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Create the wrapper
+  const wrapper = document.createElement('div');
+  wrapper.className = 'reviews-track-wrapper';
+  wrapper.innerHTML = `<div class="reviews-track">${cardsHTML}</div>`;
+
+  // Insert after the heading inside the reviews section
+  const heading = target.querySelector('h2');
+  if (heading) {
+    heading.insertAdjacentElement('afterend', wrapper);
+  } else {
+    target.appendChild(wrapper);
+  }
+}
+
+// Run after page loads
+document.addEventListener('DOMContentLoaded', buildReviewsStrip);
+</script>
 </body>
 </html>
